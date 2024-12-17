@@ -4,22 +4,23 @@ import NextAuth from "next-auth/next";
 import CredentialsProvider from "next-auth/providers/credentials";
 
 async function refreshToken(token: JWT): Promise<JWT> {
-  const res = await fetch('http://localhost:1111' + "/auth/refresh-token", {
-    method: "GET",
+  const res = await fetch(`http://localhost:1111/auth/refresh-token`, {
+    method: "POST",
     headers: {
-      authorization: `Bearer ${token.token.refreshToken}`,
+      'Authorization': `Bearer ${token.token!.refreshToken}`,
+      'Content-type': 'application/json',
     },
   });
-  console.log("refreshed");
-
   const response = await res.json();
-
-  return {
-    ...token,
-    backendTokenstoke: response,
-  };
+  if(response.statusCode!=200){
+    console.log('error')
+    return {
+      user: null,
+      token: null
+    }
+  }
+  return response.data
 }
-
 export const authOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider(
@@ -39,11 +40,11 @@ export const authOptions: NextAuthOptions = {
             "Content-Type": "application/json",
           },
         });
-        if (res.status == 401) {
-          console.log(res.statusText);
+       
+        const user = await res.json();
+        if (user.statusCode != 200) {
           return null;
         }
-        const user = await res.json();
         return user.data;
       },
     }),
@@ -53,16 +54,23 @@ export const authOptions: NextAuthOptions = {
   },
   callbacks: {
     async jwt({token,user}){
-
+     
       if (user) return { ...token, ...user };
-
+      if(!token.token||!token.user){
+        return {
+          user: null,
+          token: null
+        }
+      }
       if (new Date().getTime() < token.token.expiresIn)
         return token;
+      const newtoken = await refreshToken(token);
+      return newtoken
 
-      return await refreshToken(token);
     },
 
     async session({ token, session }:any) {
+ 
       session.user = token.user;
       session.token = token.token;
       return session;
@@ -73,7 +81,7 @@ export const authOptions: NextAuthOptions = {
       await fetch('http://localhost:1111' + "/auth/logout", {
         method: "POST",
         headers: {
-          authorization: `Bearer ${token.token.refreshToken}`,
+          authorization: `Bearer ${token.token!.refreshToken}`,
         },
       });
     },

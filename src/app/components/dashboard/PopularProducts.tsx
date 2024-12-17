@@ -14,7 +14,7 @@ import Image from "next/image";
 import SimpleBar from "simplebar-react";
 
 
-const PopularProducts = () => {
+export default async function PopularProducts () {
   const ProductTableData = [
     {
       img: product1,
@@ -390,4 +390,4 @@ const PopularProducts = () => {
   );
 };
 
-export default PopularProducts;
+

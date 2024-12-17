@@ -12,7 +12,7 @@ export const metadata: Metadata = {
   title: "MaterialM-Nextjs-Free",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;

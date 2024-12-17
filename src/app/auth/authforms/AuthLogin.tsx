@@ -4,16 +4,18 @@ import { signIn } from "next-auth/react";
 import Link from "next/link";
 import React from "react";
 import { useRef } from 'react'
-const AuthLogin = () => {
+const AuthLogin = async() => {
   const userName = useRef("");
   const pass = useRef("");
-  const onSubmit = async () => {
+  const onSubmit = async (e:any) => {
+    e.preventDefault();
     const result = await signIn("credentials", {
       username: userName.current,
       password: pass.current,
       redirect: true,
       callbackUrl: "/",
     });
+    alert(result)
   };
   return (
     <>

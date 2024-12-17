@@ -1,3 +1,6 @@
+
+
+
 import React from "react";
 import Sidebar from "./layout/vertical/sidebar/Sidebar";
 import Header from "./layout/vertical/header/Header";
@@ -11,8 +14,8 @@ export default async function Layout({
   children: React.ReactNode;
 }>) {
   const session = await getServerSession(authOptions)
-  if(!session){
-      redirect('api/auth/signin')
+  if(!session||!session!.user||!session!.token){
+      redirect('http://localhost:3000/api/auth/signin')
   }
   return (
     <div className="flex w-full min-h-screen">
@@ -25,7 +28,7 @@ export default async function Layout({
           <div
             className={`container mx-auto  py-30`}
           >
-            <Providers>
+            <Providers >
               {children}
             </Providers>
           </div>

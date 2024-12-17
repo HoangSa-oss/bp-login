@@ -13,7 +13,7 @@ import product5 from "/public/images/products/s5.jpg";
 import Image from "next/image";
 
 
-const PopularProducts = () => {
+export default async function PopularProducts () {
   const ProductTableData = [
     {
       img: product1,
@@ -170,4 +170,3 @@ const PopularProducts = () => {
   );
 };
 
-export default PopularProducts;
