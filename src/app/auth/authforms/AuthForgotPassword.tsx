@@ -13,7 +13,7 @@ const AuthForgotPassword = () => {
   const onSubmit = async (e:any) => {
     e.preventDefault();
     try{
-      const res = await fetch(`http://localhost:1111/auth/forgot-password?token=${token}`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_URL_BACKEND}/auth/forgot-password?token=${token}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

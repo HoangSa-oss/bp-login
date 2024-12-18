@@ -19,10 +19,9 @@ const BoxedLogin = () => {
               <div className="mx-auto">
                 <Logo />
               </div>
-              <p className="text-sm text-center text-dark my-3">Your Social Campaigns</p> 
               <AuthLogin />
               <div className="flex gap-2 text-base text-ld font-medium mt-6 items-center justify-center">
-                <p>New to MaterialM?</p>
+                <p>New to Bytepays?</p>
                 <Link
                   href={"/auth/register"}
                   className="text-primary text-sm font-medium"

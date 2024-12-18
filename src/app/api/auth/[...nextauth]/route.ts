@@ -5,7 +5,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 
 async function refreshToken(token: JWT): Promise<JWT> {
   try{
-    const res = await fetch(`http://localhost:1111/auth/refresh-token`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_URL_BACKEND}/auth/refresh-token`, {
       method: "POST",
       headers: {
         'Authorization': `Bearer ${token.token!.refreshToken}`,
@@ -33,7 +33,7 @@ export const authOptions: NextAuthOptions = {
       async authorize(credentials:any, req:any) {
         if (!credentials?.username || !credentials?.password) return null;
         const { username, password } = credentials;
-        const res = await fetch(`http://localhost:1111/auth/login`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_URL_BACKEND}/auth/login`, {
           method: "POST",
           body: JSON.stringify({
             username,
@@ -81,7 +81,7 @@ export const authOptions: NextAuthOptions = {
   },
   events: {
     async signOut({ token,session }) {
-      await fetch(`http://localhost:1111/auth/logout`, {
+      await fetch(`${process.env.NEXT_PUBLIC_URL_BACKEND}/auth/logout`, {
         method: "POST",
         headers: {
           authorization: `Bearer ${token.token!.refreshToken}`,

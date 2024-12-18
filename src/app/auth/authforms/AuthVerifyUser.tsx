@@ -11,7 +11,7 @@ const AuthVerifyUser = () => {
   useEffect(()=>{
     const fetchData= async ()=>{
       try{
-        const res = await fetch(`http://localhost:1111/api/users/verify-user?token=${token}`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_URL_BACKEND}/api/users/verify-user?token=${token}`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

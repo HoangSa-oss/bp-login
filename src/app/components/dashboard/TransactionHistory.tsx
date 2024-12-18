@@ -22,25 +22,28 @@ import {Pagination} from '@mui/material'
 export default function TransactionHistory () {
   const router = useRouter()
   const [dataApi,setDataApi] = useState([])
+  const [dataCountAll,setDataCountAll] = useState(0)
   const pageUrl = useSearchParams().get('page') ?? 1
   const page = Number(pageUrl)
   const [currentPage,setCurrentPage] = useState(page)
-  const limit = 10
+  const limit = 15
   useEffect(()=>{
     const fetchData= async ()=>{
       const session = await getSession()
       try{
-        const res = await fetch(`http://localhost:1111/api/payment/transaction-history?page=${currentPage-1}&limit=${limit}`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_URL_BACKEND}/api/payment/transaction-history?page=${currentPage-1}&limit=${limit}`, {
           method: "GET",
           headers: {
             authorization: `Bearer ${session!.token!.accessToken}`,
             "Content-Type": "application/json",
           }})
           const data = await res.json()
+          console.log(data)
           if(data.statusCode!=200){
             setDataApi([])
           }else{
-            setDataApi(data.data)
+            setDataApi(data.data.transactionHistory)
+            setDataCountAll(Math.ceil( data.data.countAll / limit ))
           }
       }catch(err){
         console.log(err)
@@ -75,23 +78,23 @@ export default function TransactionHistory () {
                     <Table.Cell className="whitespace-nowrap ps-6">
                       <div className="flex gap-3 items-center">
                         <div className="truncat line-clamp-2 sm:text-wrap max-w-56">
-                          <h6 className="text-sm">{item.transaction.phoneNumber}</h6>
+                          <h6 className="text-sm">{item?.transaction?.phoneNumber}</h6>
                         </div>
                       </div>
                     </Table.Cell>
                     <Table.Cell>
                       <h5 className="text-base text-wrap">
-                        {item.transaction.amount }
+                        {item?.transaction?.amount }
                       </h5>
                     </Table.Cell>
                     <Table.Cell>
                       <h5 className="text-base text-wrap">
-                        {item._id}
+                        {item?._id}
                       </h5>
                       </Table.Cell>
                     <Table.Cell>
                       <h5 className="text-base text-wrap">
-                        {item.message }
+                        {item?.message }
                       </h5>
                     </Table.Cell>
                   </Table.Row>
@@ -104,7 +107,7 @@ export default function TransactionHistory () {
       </div>
       <div style={{paddingTop: 10}}>
         <Pagination  sx={{'& > .MuiPagination-ul': {justifyContent: 'center',},}}      
-        page={currentPage} count={10} shape="rounded" onChange={handleChange} 
+        page={currentPage} count={dataCountAll} shape="rounded" onChange={handleChange} 
       />
       </div>
     </>

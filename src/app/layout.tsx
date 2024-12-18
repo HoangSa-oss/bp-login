@@ -5,11 +5,14 @@ import 'simplebar-react/dist/simplebar.min.css';
 import "./css/globals.css";
 import { Flowbite, ThemeModeScript } from "flowbite-react";
 import customTheme from "@/utils/theme/custom-theme";
+import { getServerSession } from "next-auth";
+import { authOptions } from "./api/auth/[...nextauth]/route";
+import { redirect } from "next/navigation";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "MaterialM-Nextjs-Free",
+  title: "Bytepays",
 };
 
 export default async function RootLayout({
@@ -17,6 +20,7 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+ 
   return (
     <html lang="en">
       <head>

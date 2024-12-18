@@ -19,7 +19,6 @@ const BoxedForgotPassword = () => {
               <div className="mx-auto">
                 <Logo />
               </div>
-              <p className="text-sm text-center text-dark my-3">Your Social Campaigns</p> 
               <AuthForgotPassword />
             </div>
           </div>

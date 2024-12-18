@@ -19,7 +19,7 @@ const SidebarLayout = () => {
             className="fixed menu-sidebar pt-6 bg-white dark:bg-darkgray z-[10]"
             aria-label="Sidebar with multi-level dropdown example"
           >
-            <div className="mb-7 px-4 brand-logo">
+            <div style={{ marginLeft: 43}} className="mb-7 px-4 brand-logo">
               <FullLogo />
             </div>
 

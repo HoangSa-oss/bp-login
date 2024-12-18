@@ -14,7 +14,7 @@ const AuthForgotPasswordMail = () => {
   const onSubmit = async (e:any) => {
     e.preventDefault();
     try{
-      const res = await fetch(`http://localhost:1111/auth/forgot-password-send-mail`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_URL_BACKEND}/auth/forgot-password-send-mail`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

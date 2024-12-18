@@ -13,7 +13,7 @@ export default function page ()  {
   return (
     <>
         <div className="lg:col-span-8 col-span-12">
-          <PopularProducts />
+          
         </div>
     </>
   );
