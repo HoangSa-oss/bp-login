@@ -54,7 +54,7 @@ export default function TransactionHistory () {
   },[currentPage])
   const handleChange = (event: React.ChangeEvent<unknown>, page: number) => {
     setCurrentPage(page)
-    router.push(`http://localhost:3000/ui/transaction/transaction-history?page=${page}`)
+    router.push(`/ui/transaction/transaction-history?page=${page}`)
   };
   return (
     <>
