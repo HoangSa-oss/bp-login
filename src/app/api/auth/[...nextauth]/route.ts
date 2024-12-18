@@ -4,22 +4,25 @@ import NextAuth from "next-auth/next";
 import CredentialsProvider from "next-auth/providers/credentials";
 
 async function refreshToken(token: JWT): Promise<JWT> {
-  const res = await fetch(`http://localhost:1111/auth/refresh-token`, {
-    method: "POST",
-    headers: {
-      'Authorization': `Bearer ${token.token!.refreshToken}`,
-      'Content-type': 'application/json',
-    },
-  });
-  const response = await res.json();
-  if(response.statusCode!=200){
-    console.log('error')
-    return {
-      user: null,
-      token: null
+  try{
+    const res = await fetch(`http://localhost:1111/auth/refresh-token`, {
+      method: "POST",
+      headers: {
+        'Authorization': `Bearer ${token.token!.refreshToken}`,
+        'Content-type': 'application/json',
+      },
+    });
+    const response = await res.json();
+    if(response.statusCode!=200){
+      return {
+        user: null,
+        token: null
+      }
     }
-  }
-  return response.data
+    return response.data
+  }catch(err){
+    return token
+  } 
 }
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -30,7 +33,7 @@ export const authOptions: NextAuthOptions = {
       async authorize(credentials:any, req:any) {
         if (!credentials?.username || !credentials?.password) return null;
         const { username, password } = credentials;
-        const res = await fetch("http://localhost:1111/auth/login", {
+        const res = await fetch(`http://localhost:1111/auth/login`, {
           method: "POST",
           body: JSON.stringify({
             username,
@@ -43,7 +46,7 @@ export const authOptions: NextAuthOptions = {
        
         const user = await res.json();
         if (user.statusCode != 200) {
-          return null;
+          throw new Error(user.message);
         }
         return user.data;
       },
@@ -78,7 +81,7 @@ export const authOptions: NextAuthOptions = {
   },
   events: {
     async signOut({ token,session }) {
-      await fetch('http://localhost:1111' + "/auth/logout", {
+      await fetch(`http://localhost:1111/auth/logout`, {
         method: "POST",
         headers: {
           authorization: `Bearer ${token.token!.refreshToken}`,

@@ -4,18 +4,27 @@ import { signIn } from "next-auth/react";
 import Link from "next/link";
 import React from "react";
 import { useRef } from 'react'
-const AuthLogin = async() => {
+import { useRouter } from 'next/navigation';
+
+const AuthLogin = () => {
   const userName = useRef("");
   const pass = useRef("");
+  const router = useRouter();
+
   const onSubmit = async (e:any) => {
     e.preventDefault();
     const result = await signIn("credentials", {
       username: userName.current,
       password: pass.current,
-      redirect: true,
+      redirect: false,
       callbackUrl: "/",
     });
-    alert(result)
+    if(result?.status==200){
+      console.log('router')
+      router.push('/')
+    }else{
+      alert(result?.error)
+    }
   };
   return (
     <>

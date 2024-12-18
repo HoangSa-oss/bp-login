@@ -14,40 +14,45 @@ import Image from "next/image";
 import SimpleBar from "simplebar-react";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
-import { redirect } from 'next/navigation'
+import { redirect, useRouter, useSearchParams } from 'next/navigation'
 import { error } from "console";
 import { getSession, useSession } from "next-auth/react";
+import {Pagination} from '@mui/material'
 
 export default function TransactionHistory () {
-  const  [dataApi,setDataApi] = useState([])
+  const router = useRouter()
+  const [dataApi,setDataApi] = useState([])
+  const pageUrl = useSearchParams().get('page') ?? 1
+  const page = Number(pageUrl)
+  const [currentPage,setCurrentPage] = useState(page)
+  const limit = 10
   useEffect(()=>{
     const fetchData= async ()=>{
       const session = await getSession()
-      console.log(session)
-      const res = await fetch(`http://localhost:1111/api/payment/transaction-history?page=0&limit=10`, {
-      method: "GET",
-      headers: {
-        // authorization: `Bearer ${session!.token!.accessToken}`,
-        "Content-Type": "application/json",
-      }});
-      const {data} = await res.json()
-      setDataApi(data)
+      try{
+        const res = await fetch(`http://localhost:1111/api/payment/transaction-history?page=${currentPage-1}&limit=${limit}`, {
+          method: "GET",
+          headers: {
+            authorization: `Bearer ${session!.token!.accessToken}`,
+            "Content-Type": "application/json",
+          }})
+          const data = await res.json()
+          if(data.statusCode!=200){
+            setDataApi([])
+          }else{
+            setDataApi(data.data)
+          }
+      }catch(err){
+        console.log(err)
+      }
+    
     }
     fetchData()
-  },[])
-  // const res = await fetch(`http://localhost:1111/api/payment/transaction-history?page=0&limit=10`, {
-  //   method: "GET",
-  //   headers: {
-  //     authorization: `Bearer ${session.token.accessToken}`,
-  //     "Content-Type": "application/json",
-  //   },  
-  // });
-  // const data = await res.json()
-
-  
-  /*Table Action*/
-  // const data:any =[]
-
+  },[currentPage])
+  const handleChange = (event: React.ChangeEvent<unknown>, page: number) => {
+    setCurrentPage(page)
+    router.push(`http://localhost:3000/ui/transaction/transaction-history?page=${page}`)
+  };
   return (
     <>
       <div className="rounded-lg dark:shadow-dark-md shadow-md bg-white dark:bg-darkgray py-6 px-0 relative w-full">
@@ -81,7 +86,7 @@ export default function TransactionHistory () {
                     </Table.Cell>
                     <Table.Cell>
                       <h5 className="text-base text-wrap">
-                        {item.updatedAt}
+                        {item._id}
                       </h5>
                       </Table.Cell>
                     <Table.Cell>
@@ -95,6 +100,12 @@ export default function TransactionHistory () {
             </Table>
           </div>
         {/* </SimpleBar> */}
+        
+      </div>
+      <div style={{paddingTop: 10}}>
+        <Pagination  sx={{'& > .MuiPagination-ul': {justifyContent: 'center',},}}      
+        page={currentPage} count={10} shape="rounded" onChange={handleChange} 
+      />
       </div>
     </>
   );

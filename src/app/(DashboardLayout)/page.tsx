@@ -9,7 +9,7 @@ import EarningReports from "../components/dashboard/EarningReports";
 import BlogCards from "../components/dashboard/BlogCards";
 import Link from "next/link";
 
-export default async function page ()  {
+export default function page ()  {
   return (
     <>
         <div className="lg:col-span-8 col-span-12">

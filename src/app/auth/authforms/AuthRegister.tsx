@@ -10,8 +10,9 @@ const AuthRegister = () => {
   const company = useRef("");
   const username = useRef("");
   const password = useRef("");
-  const onSubmit = async () => {
-    const res = await fetch('http://localhost:1111' + "/auth/register", {
+  const onSubmit = async (e:any) => {
+    e.preventDefault();
+    const res = await fetch(`http://localhost:1111/auth/register`, {
       method: "POST",
       headers:{
        "Content-Type": "application/json; charset=utf-8"
@@ -24,12 +25,11 @@ const AuthRegister = () => {
         full_name: name.current,
         phone: phone.current,
         company:company.current,
-        is_verify_email:true,
        
       }),
     });
     const data = await res.json()
-    alert(data.message)
+    alert(data.data)
     };
   return (
     <>

@@ -14,7 +14,7 @@ import Image from "next/image";
 import SimpleBar from "simplebar-react";
 
 
-export default async function PopularProducts () {
+export default function PopularProducts () {
   const ProductTableData = [
     {
       img: product1,
