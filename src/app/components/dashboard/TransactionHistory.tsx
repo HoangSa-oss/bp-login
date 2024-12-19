@@ -89,7 +89,7 @@ export default function TransactionHistory () {
                     </Table.Cell>
                     <Table.Cell>
                       <h5 className="text-base text-wrap">
-                        {item?._id}
+                        {item?.updateAt}
                       </h5>
                       </Table.Cell>
                     <Table.Cell>
